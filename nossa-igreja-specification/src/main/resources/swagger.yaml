@@ -1,0 +1,1067 @@
+swagger: "2.0"
+info:
+  description: "API de gerenciamento de doações e grupos de comunhão para igrejas"
+  version: "1.0.0"
+  title: "Nossa igreja - REST API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "andressa.obm@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/api/v1"
+
+
+tags:
+- name: "user"
+  description: "Operações com usuários"
+- name: "grupoComunhao"
+  description: "Operações com grupos de comunhão"
+- name: "escalaGrupoComunhao"
+  description: "Operações com escala do grupos de comunhão"
+- name: "familia"
+  description: "Operações referentes às famílias"
+- name: "doacao"
+  description: "Operações referentes às doações"
+- name: "itemDoacao"
+  description: "Operações referentes aos itens de doação"
+
+schemes:
+- "https"
+- "http"
+paths:
+  /users:
+    post:
+      tags:
+      - "user"
+      summary: "Cadastra um usuário"
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/UserDTO"
+      responses:
+        "201":
+          description: "created"
+          schema:
+            $ref: "#/definitions/UserDTO"
+        "400":
+          description: "bad request"
+    put:
+      tags:
+      - "user"
+      summary: "Atualiza dados do usuário"
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/UserDTO"
+      responses:
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+          - "VISITANTE"
+  /users/login:
+    get:
+      tags:
+      - "user"
+      summary: "Faz login de usuário"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userLoginDTO"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/UserLoginDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+  /users/logout:
+    get:
+      tags:
+      - "user"
+      summary: "Encerra sessão do usuário"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "ok"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+          - "VISITANTE"
+  /users/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Usuário por id"
+      description: ""
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/UserDTO"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+          - "VISITANTE"
+    delete:
+      tags:
+      - "user"
+      summary: "Exclui um usuário"
+      description: ""
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+  /users/pageable:
+    get:
+      tags:
+      - "user"
+      summary: "Traz lista de usuários"
+      description: ""
+      operationId: "getUsers"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/UserDTO"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          
+  /grupos-comunhao:
+    post:
+      tags:
+      - "grupoComunhao"
+      summary: "Cria um novo grupo de comunhão"
+      description: ""
+      operationId: "addGrupoComunhao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "grupoComunhaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/GrupoComunhaoDTO"
+      responses:
+        "201":
+          description: "created"
+        "400":
+          description: "bad request"
+      security:
+        - auth:
+          - "ADMIN"
+    put:
+      tags:
+      - "grupoComunhao"
+      summary: "Atualiza grupo de comunhão"
+      description: ""
+      operationId: "updateGrupoComunhao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "grupoComunhaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/GrupoComunhaoDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+        
+  /grupos-comunhao/{id}:
+    get:
+      tags:
+      - "grupoComunhao"
+      summary: "Traz grupo de comunhão por id"
+      operationId: "getGrupoComunhaoById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/GrupoComunhaoDTO"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+      
+    delete:
+      tags:
+      - "grupoComunhao"
+      summary: "Exclui um grupo de comunhão"
+      description: ""
+      operationId: "deleteGrupoComunhao"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+  /grupos-comunhao/{id}/participar:
+    patch:
+      tags:
+      - "grupoComunhao"
+      summary: "Inclui usuário em participantes grupo de comunhão"
+      description: ""
+      operationId: "participarGrupoComunhao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "grupoComunhaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/GrupoComunhaoDTO"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+        
+  /grupos-comunhao/pageable:
+    get:
+      tags:
+      - "grupoComunhao"
+      summary: "Traz lista de grupos de comunhão"
+      operationId: "findAllGrupoComunhao"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/GrupoComunhaoDTO"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+      
+  /grupos-comunhao/escala:
+    post:
+      tags:
+      - "escalaGrupoComunhao"
+      summary: "Cria uma escala para grupo de comunhão"
+      description: ""
+      operationId: "addEscalaGrupoComunhao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "escalaGrupoComunhaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/EscalaGrupoComunhaoDTO"
+      responses:
+        "201":
+          description: "created"
+        "400":
+          description: "bad request"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+    put:
+      tags:
+      - "escalaGrupoComunhao"
+      summary: "Atualiza escala grupo de comunhão"
+      description: ""
+      operationId: "updateEscalaGrupoComunhao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "escalaGrupoComunhaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/EscalaGrupoComunhaoDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+        
+  /grupos-comunhao/escala/{id}:
+    get:
+      tags:
+      - "escalaGrupoComunhao"
+      summary: "Traz escala grupo de comunhão por id"
+      operationId: "getEscalaGrupoComunhaoById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/EscalaGrupoComunhaoDTO"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+      
+    delete:
+      tags:
+      - "escalaGrupoComunhao"
+      summary: "Exclui uma escala grupo de comunhão"
+      description: ""
+      operationId: "deleteEscalaGrupoComunhao"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+          
+  /grupos-comunhao/escalas/pageable:
+    get:
+      tags:
+      - "escalaGrupoComunhao"
+      summary: "Traz lista de escalas grupos de comunhão"
+      operationId: "findAllEscalaGrupoComunhao"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/EscalaGrupoComunhaoDTO"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+          
+  /grupos-comunhao/escalas/atual:
+    get:
+      tags:
+      - "escalaGrupoComunhao"
+      summary: "Traz as próximas escalas grupo de comunhão"
+      operationId: "findNextEscalaGrupoComunhao"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/EscalaGrupoComunhaoDTO"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+
+  /familias:
+    post:
+      tags:
+      - "familia"
+      summary: "Cria uma família"
+      description: ""
+      operationId: "addFamilia"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "familiaDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/FamiliaDTO"
+      responses:
+        "201":
+          description: "created"
+        "400":
+          description: "bad request"
+      security:
+        - auth:
+          - "ADMIN"
+    put:
+      tags:
+      - "familia"
+      summary: "Atualiza familia"
+      description: ""
+      operationId: "updateFamilia"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "familiaDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/FamiliaDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+    get:
+      tags:
+      - "familia"
+      summary: "Traz lista de familias"
+      operationId: "findAllFamilia"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FamiliaDTO"
+      security:
+        - auth:
+          - "ADMIN"
+        
+  /familias/{id}:
+    get:
+      tags:
+      - "familia"
+      summary: "Traz familia por id"
+      operationId: "getFamiliaById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/FamiliaDTO"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+      
+    delete:
+      tags:
+      - "familia"
+      summary: "Exclui uma família"
+      description: ""
+      operationId: "deleteFamilia"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+  
+  /doacoes:
+    post:
+      tags:
+      - "doacao"
+      summary: "Inclui uma doação"
+      description: ""
+      operationId: "addDoacao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "doacaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/DoacaoDTO"
+      responses:
+        "201":
+          description: "created"
+        "400":
+          description: "bad request"
+      security:
+        - auth:
+          - "ADMIN"
+    put:
+      tags:
+      - "doacao"
+      summary: "Atualiza doacao"
+      description: ""
+      operationId: "updatedoacao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "doacaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/DoacaoDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+    get:
+      tags:
+      - "doacao"
+      summary: "Traz lista de doações"
+      operationId: "findAlldoacao"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FamiliaDTO"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+          - "VISITANTE"
+        
+  /doacoes/{id}:
+    get:
+      tags:
+      - "doacao"
+      summary: "Traz doacao por id"
+      operationId: "getDoacaoById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/DoacaoDTO"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+      
+    delete:
+      tags:
+      - "doacao"
+      summary: "Exclui uma doacao"
+      description: ""
+      operationId: "deleteDoacao"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          
+  /doacoes/{id}/doar:
+    put:
+      tags:
+      - "doacao"
+      summary: "Atualiza doacao com dados do doador"
+      description: ""
+      operationId: "doarDoacao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "doacaoDTO"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/DoacaoDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+          - "MEMBRO"
+          - "VISITANTE"
+  
+  /doacoes/itens:
+    post:
+      tags:
+      - "itemDoacao"
+      summary: "Cria um item de doação"
+      description: ""
+      operationId: "addItemDoacao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "itemDoacaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/ItemDoacaoDTO"
+      responses:
+        "201":
+          description: "created"
+        "400":
+          description: "bad request"
+      security:
+        - auth:
+          - "ADMIN"
+    put:
+      tags:
+      - "itemDoacao"
+      summary: "Atualiza item de doação"
+      description: ""
+      operationId: "updateItemDoacao"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "itemDoacaoDTO"
+        required: true
+        schema:
+          $ref: "#/definitions/ItemDoacaoDTO"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+    get:
+      tags:
+      - "itemDoacao"
+      summary: "Traz lista de itens de doação"
+      operationId: "findAllItemdoacao"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FamiliaDTO"
+      security:
+        - auth:
+          - "ADMIN"
+        
+  /doacoes/itens/{id}:
+    get:
+      tags:
+      - "itemDoacao"
+      summary: "Traz item doacao por id"
+      operationId: "getItemDoacaoById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/DoacaoDTO"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+      
+    delete:
+      tags:
+      - "itemDoacao"
+      summary: "Exclui um item de Doação"
+      description: ""
+      operationId: "deleteItemDoacao"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "ok"
+        "400":
+          description: "bad request"
+        "404":
+          description: "not found"
+      security:
+        - auth:
+          - "ADMIN"
+ 
+securityDefinitions:
+  auth:
+    type: "oauth2"
+    authorizationUrl: "http://localhost8082/auth/"
+    flow: "implicit"
+    scopes:
+      ADMIN: "Gerencia grupos e doações"
+      MEMBRO: "Gerencia escalas e se inscreve em grupos"
+      VISITANTE: "Gerencia seu prório perfil e faz doações"
+ 
+    
+definitions:
+
+  CategoriaDoacaoDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      nome:
+        type: "string"
+  
+  DoacaoDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      item:
+        $ref: "#/definitions/ItemDoacaoDTO"
+      tamanho:
+        type: "string"
+      unidadeMedida:
+        $ref: "#/definitions/UnidadeMedidaDTO"
+      qauntidade:
+        type: "integer"
+      familia:
+        $ref: "#/definitions/FamiliaDTO"
+      detalhes: 
+        type: "string"
+      idDoador:
+        type: "integer"
+        format: "int64"
+      dataEntrega:
+        type: "string"
+        format: "date"
+        
+  EnderecoDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      cep:
+        type: "string"
+      rua:
+        type: "string"
+      complemento:
+        type: "string"
+      uf:
+        type: "string"
+      cidade:
+        type: "string"
+      bairro:
+        type: "string"
+      ativo:
+        type: "boolean"
+  
+  EscalaGrupoComunhaoDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      grupoComunhao:
+        $ref: "#/definitions/GrupoComunhaoDTO"
+      data:
+        type: "string"
+        format: "date"
+      dinamica: 
+        $ref: "#/definitions/UserDTO"
+      louvor:
+        $ref: "#/definitions/UserDTO"
+      palavra:
+        $ref: "#/definitions/UserDTO"
+      lanche:
+        $ref: "#/definitions/UserDTO"
+  
+  FamiliaDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      pessoas:
+        type: "array"
+        items: 
+          $ref: "#/definitions/UserDTO"
+      principal:
+        $ref: "#/definitions/UserDTO"
+      endereco:
+        $ref: "#/definitions/EnderecoDTO"
+
+  GrupoComunhaoDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      diaSemana:
+        type: "string"
+      horario:
+        type: "string"
+        format: "time"
+      endereco:
+        type: "array"
+        items: 
+          $ref: "#/definitions/EnderecoDTO"
+      lider:
+        $ref: "#/definitions/UserDTO"
+      participantes:
+        type: "array"
+        items: 
+          $ref: "#/definitions/UserDTO"
+      maxParticipantes:
+        type: "integer"
+  
+  ItemDoacaoDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      nome:
+        type: "string"
+      categoriaDoacao:
+        $ref: "#/definitions/CategoriaDoacaoDTO"
+  
+  UnidadeMedidaDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      sigla: 
+        type: "string"
+
+  UserDTO:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      birthDate:
+        type: "string"
+        format: "date"
+      phoneNumber:
+        type: "string"
+      email:
+        type: "string"
+      passwordHash:
+        type: "string"
+      acceptTerms:
+        type: "boolean"
+        
+  UserLoginDTO:
+    type: "object"
+    properties:
+      userName:
+        type: "string"
+      passwordHash:
+        type: "string"
+      
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
