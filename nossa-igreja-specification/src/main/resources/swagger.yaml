@@ -41,10 +41,10 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "userDTO"
+        name: "userCadastroDTO"
         required: true
         schema:
-          $ref: "#/definitions/UserDTO"
+          $ref: "#/definitions/UserCadastroDTO"
       responses:
         "201":
           description: "created"
@@ -70,42 +70,6 @@ paths:
           description: "bad request"
         "404":
           description: "not found"
-      security:
-        - auth:
-          - "oauth2"
-  /users/login:
-    get:
-      tags:
-      - "user"
-      summary: "Faz login de usuário"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "userLoginDTO"
-        in: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/UserLoginDTO"
-      responses:
-        "200":
-          description: "ok"
-        "400":
-          description: "bad request"
-  /users/logout:
-    get:
-      tags:
-      - "user"
-      summary: "Encerra sessão do usuário"
-      description: ""
-      operationId: "logoutUser"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        "200":
-          description: "ok"
       security:
         - auth:
           - "oauth2"
@@ -172,7 +136,9 @@ paths:
         "200":
           description: "ok"
           schema:
-            $ref: "#/definitions/UserDTO"
+            type: "array"
+            items:
+              $ref: "#/definitions/UserDTO"
         "400":
           description: "bad request"
         "404":
@@ -1031,18 +997,25 @@ definitions:
         type: "string"
       email:
         type: "string"
-      passwordHash:
+
+  UserCadastroDTO:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      birthDate:
+        type: "string"
+        format: "date"
+      phoneNumber:
+        type: "string"
+      email:
+        type: "string"
+      password:
         type: "string"
       acceptTerms:
         type: "boolean"
-        
-  UserLoginDTO:
-    type: "object"
-    properties:
-      userName:
-        type: "string"
-      passwordHash:
-        type: "string"
       
 externalDocs:
   description: "Find out more about Swagger"

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/nossa-igreja
+    username: postgres
+    password: Caribe2018
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
