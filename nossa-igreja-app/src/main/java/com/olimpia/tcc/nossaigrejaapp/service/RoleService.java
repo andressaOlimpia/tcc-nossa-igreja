@@ -15,7 +15,7 @@ public class RoleService {
     private final RoleRepository roleRepository;
 
     public void setRole (User usuario, String role){
-        Role roleVisitante = roleRepository.findByName(role).orElseThrow();
-        usuario.setRoles(Set.of(roleVisitante));
+        Role roleEncontrada = roleRepository.findByName(role).orElseThrow();
+        usuario.setRoles(Set.of(roleEncontrada));
     }
 }

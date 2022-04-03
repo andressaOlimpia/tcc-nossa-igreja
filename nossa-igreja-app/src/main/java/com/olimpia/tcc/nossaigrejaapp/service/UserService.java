@@ -1,5 +1,6 @@
 package com.olimpia.tcc.nossaigrejaapp.service;
 
+import com.olimpia.tcc.nossaigrejaapp.dto.UserDTO;
 import com.olimpia.tcc.nossaigrejaapp.model.RolesEnum;
 import com.olimpia.tcc.nossaigrejaapp.model.User;
 import com.olimpia.tcc.nossaigrejaapp.repository.UserRepository;
@@ -30,13 +31,36 @@ public class UserService {
         return userRepository.save(usuario);
     }
 
-    public User findById(Long id){return userRepository.findById(id).orElseThrow();}
+    public User edit(UserDTO userDTO) throws Exception {
+        User usuario = findById(userDTO.getId());
 
-    public List<User> findAll(){
-        return userRepository.findAll();
+        usuario.setFirstName(userDTO.getFirstName());
+        usuario.setLastName(userDTO.getLastName());
+        usuario.setBirthDate(userDTO.getBirthDate());
+        usuario.setPhoneNumber(userDTO.getPhoneNumber());
+        usuario.setEmail(userDTO.getEmail());
+        usuario.setUsername(userDTO.getEmail());
+
+        return userRepository.save(usuario);
     }
+
+    public User findById(Long id) throws Exception {return userRepository.findById(id)
+            .orElseThrow(()-> new Exception("Usuário não encontrado"));}
+
 
     public List<User> findAllFilteredByFirstName(String prefix){
         return userRepository.findByFirstNameStartingWithIgnoreCaseOrderByFirstName(prefix);
+    }
+
+    public void delete(Long id){
+        userRepository.deleteById(id);
+    }
+
+    public void deleteAll(List<Long> ids){
+        userRepository.deleteAllById(ids);
+    }
+
+    public List<User> findAll(){
+        return userRepository.findAll();
     }
 }
