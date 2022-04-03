@@ -17,4 +17,8 @@ public class EnderecoService {
         endereco.setCreatedDate(LocalDateTime.now());
         return enderecoRepository.save(endereco);
     }
+
+    public Endereco edit(Endereco endereco){
+        return enderecoRepository.save(endereco);
+    }
 }

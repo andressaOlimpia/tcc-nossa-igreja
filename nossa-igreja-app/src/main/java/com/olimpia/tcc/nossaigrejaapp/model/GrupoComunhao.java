@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -44,7 +45,7 @@ public class GrupoComunhao implements Serializable {
 //            inverseJoinColumns = { @JoinColumn(name = "ID_ENDERECO") })
 //    private List<Endereco> enderecos;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "ID_ENDERECO", foreignKey = @ForeignKey(name = "FK_GRUPO_COMUNHAO_ENDERECO"))
     private Endereco endereco;
 
@@ -56,7 +57,7 @@ public class GrupoComunhao implements Serializable {
     @JoinTable(name = "GRUPO_COMUNHAO_PARTICIPANTES",
             joinColumns = @JoinColumn(name = "ID_GRUPO_COMUNHAO"),
             inverseJoinColumns = @JoinColumn(name= "ID_USER"))
-    private List<User> participantes;
+    private List<User> participantes = new ArrayList<>();
 
     @Column(name = "MAX_PARTICIPANTES")
     private BigInteger maxParticipantes;
