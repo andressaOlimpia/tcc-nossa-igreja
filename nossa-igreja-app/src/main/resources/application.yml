@@ -1,9 +1,43 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/nossa-igreja
+    #url: jdbc:postgresql://nossaigreja.cfjblqi0helk.us-east-1.rds.amazonaws.com:5432/nossaigreja
     username: postgres
     password: Caribe2018
     initialization-mode: always
   jpa:
     hibernate:
       ddl-auto: update
+
+security:
+  jwt:
+    resource-ids: client-password
+  sessions: stateless
+  basic:
+    enabled: false
+  user:
+    password: none
+  oauth2:
+    resource:
+      jwt:
+        keyValue: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqF1p0VHErqWaSe4Rrign
+          HV/JX4Bm0VyrIVGQBuIn8Z0jF0bEmSzO3LRscZxg4zJyNXRm4eD2vvX6L8z0gt4X
+          G4AdJ4tFUblSwGZTbTHFTGgENTpzEfpCOeBtUdC7h33oXm+vGDqMofI3QTQFFvjT
+          +G9+wOtkLdVTdWUYpOKes1l1z7sAIfWNVwfQ4ceiJvIBXe2zVS1NRAy3zUJNkm9h
+          9wWW+B/8Csztjb+frLTI1HAFzRGb9NLmhKMAh5h93DzXqmQd9kgznnite38XWOlU
+          DqMxN7I/Qg3exws4Q2dtMU25z2CWe5ODRbIpq02SNyWk7bQgCm5KSF2ZgeQ2aOKr
+          iwIDAQAB
+          -----END PUBLIC KEY-----
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
