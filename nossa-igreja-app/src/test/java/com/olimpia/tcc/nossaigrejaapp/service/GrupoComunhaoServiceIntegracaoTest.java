@@ -7,7 +7,6 @@ import com.olimpia.tcc.nossaigrejaapp.model.User;
 import com.olimpia.tcc.nossaigrejaapp.repository.EnderecoRepository;
 import com.olimpia.tcc.nossaigrejaapp.repository.GrupoComunhaoRepository;
 import com.olimpia.tcc.nossaigrejaapp.repository.UserRepository;
-import com.olimpia.tcc.nossaigrejaapp.service.GrupoComunhaoService;
 import com.olimpia.tcc.nossaigrejaapp.testhelpers.GrupoComunhaoTestHelper;
 import com.olimpia.tcc.nossaigrejaapp.testhelpers.UsuarioTestHelper;
 import org.junit.jupiter.api.AfterEach;
@@ -58,7 +57,7 @@ class GrupoComunhaoServiceIntegracaoTest {
 
     @Test
     @Transactional
-    void deveCadastrarGrupoComunhao() throws Exception {
+    void deveCadastrarGrupoComunhao() {
        GrupoComunhao grupoComunhao = modelMapper.map(grupoComunhaoDTO, GrupoComunhao.class);
        GrupoComunhao grupoSalvo = service.save(grupoComunhao);
 
@@ -73,7 +72,7 @@ class GrupoComunhaoServiceIntegracaoTest {
 
     @Test
     @Transactional
-    void deveCadastrarEnderecoQuandoCadastrarGrupoComunhao() throws Exception {
+    void deveCadastrarEnderecoQuandoCadastrarGrupoComunhao() {
         GrupoComunhao grupoComunhao = modelMapper.map(grupoComunhaoDTO, GrupoComunhao.class);
         Assertions.assertNull(grupoComunhao.getEndereco().getId());
 
@@ -150,7 +149,7 @@ class GrupoComunhaoServiceIntegracaoTest {
 
     @Test
     @Transactional
-    void deveExcluirGrupoComunhaoPorId() throws Exception {
+    void deveExcluirGrupoComunhaoPorId() {
         GrupoComunhao grupoComunhao = modelMapper.map(grupoComunhaoDTO, GrupoComunhao.class);
         GrupoComunhao grupoSalvo = service.save(grupoComunhao);
 
@@ -160,7 +159,7 @@ class GrupoComunhaoServiceIntegracaoTest {
 
     @Test
     @Transactional
-    void deveExcluirEnderecoAoExcluirGrupoComunhao() throws Exception {
+    void deveExcluirEnderecoAoExcluirGrupoComunhao() {
         GrupoComunhao grupoComunhao = modelMapper.map(grupoComunhaoDTO, GrupoComunhao.class);
         GrupoComunhao grupoSalvo = service.save(grupoComunhao);
 
