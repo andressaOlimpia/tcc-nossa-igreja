@@ -6,6 +6,7 @@ import com.olimpia.tcc.nossaigrejaapp.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -17,5 +18,15 @@ public class RoleService {
     public void setRole (User usuario, String role){
         Role roleEncontrada = roleRepository.findByName(role).orElseThrow();
         usuario.setRoles(Set.of(roleEncontrada));
+    }
+
+    public void setRoleById (User usuario, Long roleId){
+        Role roleEncontrada = roleRepository.findById(roleId).orElseThrow();
+        usuario.getRoles().clear();
+        usuario.getRoles().add(roleEncontrada);
+    }
+
+    public List<Role> findAllRoles(){
+        return roleRepository.findAll();
     }
 }

@@ -1,7 +1,9 @@
 package com.olimpia.tcc.nossaigrejaapp.controller;
 
+import com.olimpia.tcc.nossaigrejaapp.dto.RoleDTO;
 import com.olimpia.tcc.nossaigrejaapp.dto.UserCadastroDTO;
 import com.olimpia.tcc.nossaigrejaapp.dto.UserDTO;
+import com.olimpia.tcc.nossaigrejaapp.model.Role;
 import com.olimpia.tcc.nossaigrejaapp.model.User;
 import com.olimpia.tcc.nossaigrejaapp.service.RoleService;
 import com.olimpia.tcc.nossaigrejaapp.service.UserService;
@@ -63,5 +65,23 @@ public class UserController {
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/role")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<UserDTO> editUserRole(@Valid @RequestBody UserDTO userDTO) throws Exception {
+        UserDTO usuarioSalvo = modelMapper.map(userService.editRole(userDTO), UserDTO.class);
+
+        return new ResponseEntity<>(usuarioSalvo, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/roles")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<List<RoleDTO>> getUserRoles(){
+        List<Role> roles = roleService.findAllRoles();
+        List<RoleDTO> rolesDTO =roles.stream()
+                .map(usuario -> modelMapper.map(usuario, RoleDTO.class)).collect(Collectors.toList());
+
+        return new ResponseEntity<>(rolesDTO, HttpStatus.OK);
     }
 }

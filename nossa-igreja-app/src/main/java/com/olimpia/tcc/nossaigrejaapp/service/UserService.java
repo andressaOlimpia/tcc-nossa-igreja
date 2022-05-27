@@ -63,4 +63,11 @@ public class UserService {
     public List<User> findAll(){
         return userRepository.findAll();
     }
+
+    public User editRole(UserDTO userDTO) throws Exception {
+        User usuario = findById(userDTO.getId());
+        roleService.setRoleById(usuario, userDTO.getRoles().get(0).getId());
+
+        return userRepository.save(usuario);
+    }
 }
