@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -61,8 +62,12 @@ public class GrupoComunhaoService {
         grupoComunhaoRepository.deleteById(id);
     }
 
-    public void deleteAll(List<Long> ids){
+    public void deleteAllById(List<Long> ids){
         grupoComunhaoRepository.deleteAllById(ids);
+    }
+
+    public void deleteAll(){
+        grupoComunhaoRepository.deleteAll();
     }
 
     public List<GrupoComunhao> findAll(){
@@ -82,5 +87,21 @@ public class GrupoComunhaoService {
         grupoComunhao.getParticipantes().add(novoParticipante);
 
         return grupoComunhaoRepository.save(grupoComunhao);
+    }
+
+    public GrupoComunhao excluirParticipante(Long idGrupo, Long idUsuario) throws Exception{
+        GrupoComunhao grupoComunhao = this.findById(idGrupo);
+
+        List<User> participantes = grupoComunhao.getParticipantes().stream()
+                .filter((participante -> !participante.getId().equals(idUsuario)))
+                .collect(Collectors.toList());
+
+        grupoComunhao.setParticipantes(participantes);
+
+        return grupoComunhaoRepository.save(grupoComunhao);
+    }
+
+    public List<GrupoComunhao> encontrarGruposPorParticipanteId(Long id){
+        return grupoComunhaoRepository.findByParticipantesIdOrderById(id);
     }
 }

@@ -82,4 +82,20 @@ public class GrupoComunhaoController {
                 .map(grupoComunhaoService.inscreverParticipante(id, participante.getId()), GrupoComunhaoDTO.class);
         return new ResponseEntity<>(grupoAtualizado, HttpStatus.OK);
     }
+
+    @PatchMapping(value = "/{id}/cancelar-inscricao")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBRO')")
+    public ResponseEntity<GrupoComunhaoDTO> excluirParticipante(@PathVariable Long id, @RequestBody UserInscricaoGrupoDTO participante) throws Exception {
+        GrupoComunhaoDTO grupoAtualizado = modelMapper
+                .map(grupoComunhaoService.excluirParticipante(id, participante.getId()), GrupoComunhaoDTO.class);
+        return new ResponseEntity<>(grupoAtualizado, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/participante/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBRO')")
+    public ResponseEntity<List<GrupoComunhaoDTO>> getGrupoComunhaoByParticipanteId(@PathVariable Long id) {
+        List<GrupoComunhaoDTO> grupoComunhaoDTO = grupoComunhaoService.encontrarGruposPorParticipanteId(id).stream()
+                .map(grupo -> modelMapper.map(grupo, GrupoComunhaoDTO.class)).collect(Collectors.toList());
+        return new ResponseEntity<>(grupoComunhaoDTO, HttpStatus.OK);
+    }
 }
