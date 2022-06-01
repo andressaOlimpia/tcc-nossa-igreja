@@ -71,4 +71,6 @@ public class DoacaoService {
         doacaoRecebida.setEntregaRealizada(!doacaoRecebida.isEntregaRealizada());
         return edit(doacaoRecebida);
     }
+
+    public void deleteAll() {repository.deleteAll();}
 }
