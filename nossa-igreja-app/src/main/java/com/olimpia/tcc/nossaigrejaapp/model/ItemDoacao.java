@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "ITEM_DOACAO")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "hashcode"})
 @SequenceGenerator(name = "ITEM_DOACAO_ID_ITEM_DOACAO_SEQ", allocationSize = 1)
-public class ItemDoacao {
+public class ItemDoacao implements Serializable {
 
     @Id
     @GeneratedValue(generator = "ITEM_DOACAO_ID_ITEM_DOACAO_SEQ", strategy = GenerationType.SEQUENCE)

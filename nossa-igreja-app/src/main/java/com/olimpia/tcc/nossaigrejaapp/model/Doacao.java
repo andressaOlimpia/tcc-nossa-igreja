@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "DOACAO")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "hashcode"})
 @SequenceGenerator(name = "DOACAO_ID_DOACAO_SEQ", allocationSize = 1)
-public class Doacao {
+public class Doacao implements Serializable {
 
     @Id
     @GeneratedValue(generator = "DOACAO_ID_DOACAO_SEQ", strategy = GenerationType.SEQUENCE)

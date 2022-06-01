@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @Table(name = "FAMILIA")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "hashcode"})
 @SequenceGenerator(name = "FAMILIA_ID_FAMILIA_SEQ", allocationSize = 1)
-public class Familia {
+public class Familia implements Serializable {
 
     @Id
     @GeneratedValue(generator = "FAMILIA_ID_FAMILIA_SEQ", strategy = GenerationType.SEQUENCE)
