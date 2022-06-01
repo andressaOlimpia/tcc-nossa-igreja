@@ -1,5 +1,6 @@
 package com.olimpia.tcc.nossaigrejaapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.olimpia.tcc.nossaigrejaapp.model.DiaSemanaEnum;
 import com.olimpia.tcc.nossaigrejaapp.model.Endereco;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class GrupoComunhaoDTO {
     @NotNull
     private DiaSemanaEnum diaSemana;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="HH:mm")
     @NotNull
     private LocalTime horario;
 
