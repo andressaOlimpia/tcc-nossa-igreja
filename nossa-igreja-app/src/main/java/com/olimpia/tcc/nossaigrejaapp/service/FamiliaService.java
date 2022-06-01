@@ -44,15 +44,12 @@ public class FamiliaService {
     public Familia edit(Familia familia) throws Exception {
         Familia familiaAntiga = findById(familia.getId());
 
-        List<PessoaSemCadastro> pessoasParaExcluir = familiaAntiga.getFamiliaresSemCadastro()
-                .stream()
-                .filter(pessoa -> !familia.getFamiliaresSemCadastro().contains(pessoa))
-                .collect(Collectors.toList());
-        //excluirPessoasSemCadastro(pessoasParaExcluir);
-
         familiaAntiga.setPrincipal(familia.getPrincipal());
         familiaAntiga.setFamiliares(familia.getFamiliares());
-        familiaAntiga.setFamiliaresSemCadastro(salvarPessoasSemCadastro(familia.getFamiliaresSemCadastro()));
+        familiaAntiga.setFamiliaresSemCadastro(
+                familia.getFamiliaresSemCadastro() != null?
+                        salvarPessoasSemCadastro(familia.getFamiliaresSemCadastro()) :
+                        familia.getFamiliaresSemCadastro());
         familiaAntiga.setEndereco(getEnderecoSalvo(familia.getEndereco()));
 
         return repository.save(familia);
@@ -73,6 +70,8 @@ public class FamiliaService {
     public void deleteAll(List<Long> ids){
         repository.deleteAllById(ids);
     }
+
+    public void deleteAll() {repository.deleteAll();}
 
     public List<Familia> findAll(){
         return repository.findAll();
