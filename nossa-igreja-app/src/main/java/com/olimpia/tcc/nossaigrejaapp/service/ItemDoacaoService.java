@@ -21,6 +21,8 @@ public class ItemDoacaoService {
         repository.deleteById(id);
     }
 
+    public void deleteAll() {repository.deleteAll();}
+
     public List<ItemDoacao> findAllFilteredByCategoriaENome(Long categoriaId, String prefixoNome){
         return categoriaId == null? repository.findByNomeStartingWithIgnoreCaseOrderByNome(prefixoNome)
         : repository.findByCategoriaIdAndNomeStartingWithIgnoreCaseOrderByNome(categoriaId, prefixoNome);
